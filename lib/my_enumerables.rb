@@ -25,6 +25,7 @@ module Enumerable
       self.my_each do |elem|
         count+=1 if elem == args[0]
       end
+      warn "warning: given block not used" if block_given?
       return count
     end
     return self.length unless block_given?
