@@ -105,6 +105,17 @@ module Enumerable
       return result
     end   
   end
+
+  def my_map
+    
+    return to_enum(:my_map) unless block_given?
+
+    new_arr = []
+    self.my_each do |elem|
+      new_arr << yield(elem)
+    end
+    new_arr
+  end
 end
 
 # You will first have to define my_each
