@@ -156,6 +156,35 @@ module Enumerable
     end
     new_arr
   end
+
+  def my_none?(*args)
+    
+    if args.length > 1
+      raise ArgumentError, "wrong number of arguments (given #{args.length}, expected 0..1)"
+    end
+
+    if args.length == 1
+      warn "warning: given block not used" if block_given?
+      self.my_each do |elem|
+      return false if args[0] === elem
+    end
+      return true
+    end
+
+    if block_given?
+      self.my_each do |elem|
+        return false if yield(elem)
+      end
+      return true
+    end
+
+    if args.length == 0 && !block_given?
+      self.my_each do |elem|
+        return false if elem
+      end
+      return true
+    end
+  end
 end
 
 # You will first have to define my_each
