@@ -17,6 +17,24 @@ module Enumerable
     end
     false
   end
+
+  def my_count(*args)
+
+    if args.length == 1
+      count = 0
+      self.my_each do |elem|
+        count+=1 if elem == args[0]
+      end
+      return count
+    end
+    return self.length unless block_given?
+    
+    count = 0
+    self.my_each do |elem|
+      count+=1 if yield(elem)
+    end
+    count
+  end
 end
 
 # You will first have to define my_each
