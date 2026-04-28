@@ -48,6 +48,62 @@ module Enumerable
     self
   end
 
+  def my_inject(*args)
+    
+    if (args.length == 0 && !block_given?) || args.length > 2
+      raise ArgumentError, "wrong number of arguments (given #{args.length}, expected 1..2)"
+    end
+
+    if args.length == 2
+      unless args[1].is_a?(Symbol) || args[1].is_a?(String)
+        raise TypeError, "#{args[1]} is not a symbol nor a string"
+      end
+      method = args[1].to_sym.to_proc
+      result = args[0]
+      self.my_each do |elem|
+        result = method.call(result, elem)
+      end
+      return result
+    end
+
+    if args.length == 1 && !block_given?
+      unless args[0].is_a?(Symbol) || args[0].is_a?(String)
+        raise TypeError, "#{args[0]} is not a symbol nor a string"
+      end
+      method = args[0].to_sym.to_proc
+      result = self.first
+      skip_first_value = true
+      self.my_each do |elem|
+        if skip_first_value 
+          skip_first_value = false
+          next
+        end
+        result = method.call(result, elem)
+      end
+      return result
+    end
+
+    if args.length == 1 && block_given?
+      result = args[0]
+      self.my_each do |elem|
+        result = yield(result, elem)
+      end
+      return result
+    end
+
+    if args.length == 0 && block_given?
+      result = self.first
+      skip_first_value = true
+      self.my_each do |elem|
+        if skip_first_value 
+          skip_first_value = false
+          next
+        end
+        result = yield(result, elem)
+      end
+      return result
+    end   
+  end
 end
 
 # You will first have to define my_each
