@@ -185,6 +185,17 @@ module Enumerable
       return true
     end
   end
+
+  def my_select
+    
+    return to_enum(:my_select) unless block_given?
+
+    new_arr = []
+    self.my_each do |elem|
+      new_arr << elem if yield(elem)
+    end
+    new_arr
+  end
 end
 
 # You will first have to define my_each
