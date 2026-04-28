@@ -1,21 +1,61 @@
 module Enumerable
   # Your code goes here
-  def my_all?
-    return to_enum(:my_all?) unless block_given?
-
-    self.my_each do |elem|
-      return false unless yield(elem)
+  def my_all?(*args)
+    
+    if args.length > 1
+      raise ArgumentError, "wrong number of arguments (given #{args.length}, expected 0..1)"
     end
-    true
+
+    if args.length == 1
+      warn "warning: given block not used" if block_given?
+      self.my_each do |elem|
+      return false unless args[0] === elem
+    end
+      return true
+    end
+
+    if block_given?
+      self.my_each do |elem|
+        return false unless yield(elem)
+      end
+      return true
+    end
+
+    if args.length == 0 && !block_given?
+      self.my_each do |elem|
+        return false unless elem
+      end
+      return true
+    end
   end
 
-  def my_any?
-    return to_enum(:my_any?) unless block_given?
-
-    self.my_each do |elem|
-      return true if yield(elem)
+  def my_any?(*args)
+    
+    if args.length > 1
+      raise ArgumentError, "wrong number of arguments (given #{args.length}, expected 0..1)"
     end
-    false
+
+    if args.length == 1
+      warn "warning: given block not used" if block_given?
+      self.my_each do |elem|
+      return true if args[0] === elem
+    end
+      return false
+    end
+
+    if block_given?
+      self.my_each do |elem|
+        return true if yield(elem)
+      end
+      return false
+    end
+
+    if args.length == 0 && !block_given?
+      self.my_each do |elem|
+        return true if elem
+      end
+      return false
+    end
   end
 
   def my_count(*args)
@@ -103,7 +143,7 @@ module Enumerable
         result = yield(result, elem)
       end
       return result
-    end   
+    end  
   end
 
   def my_map
