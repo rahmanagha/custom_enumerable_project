@@ -35,6 +35,7 @@ module Enumerable
     end
     count
   end
+
 end
 
 # You will first have to define my_each
@@ -44,6 +45,9 @@ end
 class Array
 
   def my_each
+
+  return to_enum(:my_each) unless block_given?
+
   index = 0
     while index < self.length
       yield(self[index])
